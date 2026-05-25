@@ -3,13 +3,12 @@ Render VersionInfo.cpp with current module version
 """
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 
-# Slang version is major.minor.micro
-# We strip away any sub-version numbers after the first 3 (e.g. remove a potential `.bcr.1`)
-[
-    SLANG_VERSION_MAJOR,
-    SLANG_VERSION_MINOR,
-    SLANG_VERSION_MICRO,
-] = module_version().split(".")[:3]
+# 10.0.bcr.2: source is pinned at a slang commit beyond v10.0, but the
+# stamped version stays "10.0.0" since module_version().split(".") would
+# yield "bcr" for the patch component.
+SLANG_VERSION_MAJOR = "10"
+SLANG_VERSION_MINOR = "0"
+SLANG_VERSION_MICRO = "0"
 
 expand_template(
     name = "VersionInfo",
