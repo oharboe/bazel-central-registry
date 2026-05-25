@@ -9,20 +9,18 @@ load("@rules_python//python:defs.bzl", "py_binary")
 package(default_visibility = ["//visibility:private"])
 
 
-# Slang version is major.minor.micro
-# We strip away any sub-version numbers after the first 3 (e.g. remove a potential `.bcr.1`)
-[
-    SLANG_VERSION_MAJOR,
-    SLANG_VERSION_MINOR,
-    SLANG_VERSION_MICRO,
-] = module_version().split(".")[:3]
+# This version pins MikePopoloski/slang at a commit beyond v10.0 to expose
+# visit() overloads used by yosys-slang / slang-elab. The github commit
+# tarball extracts to slang-<sha>/, so SOURCES_PREFIX is hard-coded.
+SLANG_VERSION_MAJOR = "10"
+SLANG_VERSION_MINOR = "0"
+SLANG_VERSION_MICRO = "0"
 SLANG_VERSION = "{}.{}.{}".format(SLANG_VERSION_MAJOR, SLANG_VERSION_MINOR, SLANG_VERSION_MICRO)
 
 # The source repo has a top level directory "external" which is reserved by Bazel.
-# To hack around this, we don't use `strip_prefix` in sources/json so that the
-# "external" directory is not at the top level.
-# The downside of this is we need to prepend `SOURCES_PREFIX` to all paths here
-SOURCES_PREFIX = "slang-{}.{}".format(SLANG_VERSION_MAJOR, SLANG_VERSION_MINOR)
+# We don't use `strip_prefix` in source.json so the "external" directory
+# is not at the top level.
+SOURCES_PREFIX = "slang-f04e81565793c768b747a8fd058f3e7aeceee1b5"
 
 
 
